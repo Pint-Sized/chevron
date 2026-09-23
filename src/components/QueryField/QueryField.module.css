@@ -5,18 +5,6 @@
   margin-right: 5vw;
 }
 
-.ai-completion {
-  bottom: 100%;
-  position: absolute;
-  width: 100%;
-  height: calc(50vh - 50% - 20px - 20px);
-  font-size: 1.3em;
-  font-family: Onest;
-  margin-bottom: 20px;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-
 .field {
   outline: none;
   background: transparent;

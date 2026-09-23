@@ -5,15 +5,11 @@ import useRedirect from '../../hooks/useRedirect'
 import { SettingsContext } from '../../contexts/Settings'
 import { useStateSelector, useUpdate } from '../../contexts/Store'
 import Suggestions from '../Suggestions/Suggestions'
-import AIcompletion from '../AIcompletion/AIcompletion'
 import { allowedModes, activeKeys } from '../../rules'
 import googleAutocomplete from '../../autocomplete/googleAutocomplete'
 import History from '../../classes/localStorage/history'
 import gC from '../../functions/generationUtils/getClasses'
 import classes from './QueryField.module.css'
-import { useState } from 'react'
-
-const DOUBLE_PRESS_THRESHOLD = 300
 
 function QueryField () {
   // settings
@@ -42,9 +38,6 @@ function QueryField () {
     selectedSuggestion ? selectedSuggestion.type : undefined, 
     query)
 
-  // query for AI
-  const [aiQuery, setAiQuery] = useState('')
-
   const redirect = useRedirect()
     
   const handleRedirect = useCallback(() => {
@@ -62,7 +55,6 @@ function QueryField () {
       const newValue = value.replace(/\s{2,}/g, ' ')
 
       if (newValue !== query) {
-        setAiQuery('')
         updateStore({ 
           query: newValue, 
           selectedSuggestion: null
@@ -84,7 +76,6 @@ function QueryField () {
       case 'Escape':
         // clearing the query
         updateStore({ query: '' })
-        setAiQuery('')
         break
       default:
         if (allowedModes.get('Suggestions').has(mode) && activeKeys.get('Suggestions').has(e.key)) {
@@ -110,9 +101,6 @@ function QueryField () {
   const onKeyPress = useCallback((e) => {
     if (allowedModes.get('QueryField').has(mode)) {
       if (e.code === 'Space') {
-        if (Date.now() - spacebarLastPressRef.current < DOUBLE_PRESS_THRESHOLD)
-          setAiQuery(query)
-
         spacebarLastPressRef.current = Date.now()
       }
 
@@ -163,7 +151,6 @@ function QueryField () {
     <div
       className={classes['container']} 
       style={variables}>
-        <AIcompletion query={aiQuery} className={classes['ai-completion']} />
         { input }
         { parsedQuery.value && <Suggestions
             queryMode={settings.appearance.style}

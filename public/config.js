@@ -170,27 +170,6 @@ window.CONFIG = {
       pinned: true
     },
     {
-      category: 'Programming',
-      name: 'ChatGPT',
-      icon: 'chatGPT',
-      url: 'https://chat.openai.com/chat',
-      normalisedURL: 'openai.com',
-      triggers: [
-        'c',
-        'chat',
-        'gpt',
-        'cgpt',
-        'chatgpt'
-      ],
-      key: 'KeyC',
-      bgColor: {
-        type: 'solid',
-        color: '#70a597',
-      },
-      textColor: '#f7f7f7',
-      pinned: true
-    },
-    {
       category: 'Other',
       name: 'Translate',
       icon: 'translate',
