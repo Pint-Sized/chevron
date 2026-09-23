@@ -67,7 +67,7 @@ function InteractiveBackground({
     '--text-color': textColor,
     '--text-size': textSize,
     '--text-opacity': textOpacity,
-    '--secondary': getCssGradient(color)
+    '--primary': getCssGradient(color)
   }
   
 

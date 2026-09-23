@@ -31,7 +31,7 @@ function Card({ active=false, visibility=true, icon, bgColor, textColor, hotKey,
     },
     plate: {
       instant: {
-        '--secondary': backgroundStyle
+        '--primary': backgroundStyle
       },
       transition: {
         duration: PLATE_TRANSITION_DURATION

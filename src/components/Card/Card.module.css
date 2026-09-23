@@ -89,7 +89,7 @@ body[data-color-scheme=light] .hint {
   aspect-ratio: 1;
   z-index: 10000;
   border-radius: 50%;
-  background: var(--secondary);
+  background: var(--primary);
   background-repeat: no-repeat;
   background-size: 200% 200%;
   background-position: right top;

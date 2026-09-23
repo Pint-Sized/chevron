@@ -6,6 +6,7 @@ import { FiEye, FiEyeOff } from 'react-icons/fi'
 import Header from './Header/Header'
 import Category from './Category/Category'
 import settings from '../../../settings/settings'
+import { Theme } from '../../../settings/settingTypes'
 
 function Settings({ onClose }) {
   const current = useContext(SettingsContext)
@@ -16,6 +17,21 @@ function Settings({ onClose }) {
 
   const [showHidden, setShowHidden] = useState(false)
   const hiddenSettings = showHidden ? [] : settings.hidden
+  const template = {
+    ...settings.template,
+    appearance: {
+      ...settings.template.appearance,
+      themes: Object.fromEntries(
+        Object.keys(current.appearance.themes).map(name => [name, new Theme()])
+      )
+    }
+  }
+  const customHiddenSettings = hiddenSettings.concat(
+    Object.keys(current.appearance.themes).flatMap(theme => (
+      ['chevron', 'query', 'suggestions', 'background', 'prefix', 'visited', 'time', 'card']
+        .map(color => `appearance.themes.${theme}.${color}`)
+    ))
+  )
 
   return (
     <motion.div
@@ -61,16 +77,16 @@ function Settings({ onClose }) {
               width: 0
             }
           }}>
-            <Header title='Settings' isPlaceholder/>
-            {
-              Object.entries(settings.template).map(([category]) => {
-                if (hiddenSettings.includes(category))
+          <Header title='Settings' isPlaceholder/>
+          {
+              Object.entries(template).map(([category]) => {
+                if (customHiddenSettings.includes(category))
                   return null
                 return <Category
                   key={category}
                   path={category}
-                  hidden={hiddenSettings}
-                  template={settings.template}
+                  hidden={customHiddenSettings}
+                  template={template}
                   current={current}
                   onChange={setCurrent}/>
               })
@@ -115,6 +131,7 @@ function Settings({ onClose }) {
                 color='neutral'
                 onClick={() => {
                   localStorage.removeItem('settings')
+                  localStorage.removeItem('colorschemes')
                   location.reload()
                 }}>
                   Reset settings

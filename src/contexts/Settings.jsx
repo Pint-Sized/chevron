@@ -1,11 +1,42 @@
 import { createContext, useEffect, useState } from 'react'
-import useColorSchemeDetector from '../hooks/useColorSchemeDetector'
 import assignDeep from 'assign-deep'
 import settings from '../../settings/settings'
 import LocalSettings from '../classes/localStorage/settings'
+import ColorSchemes from '../classes/localStorage/colorschemes'
+import copyObj from '../functions/dataUtils/copyObj'
+import { migrateColorSchemes } from '../functions/dataUtils/colorSchemes'
 
 const localSettigns = new LocalSettings()
-const assignedSettings = assignDeep(settings.defaults, localSettigns.object)
+const localColorSchemes = new ColorSchemes()
+const storedSettings = copyObj(localSettigns.object)
+const storedColorSchemes = copyObj(localColorSchemes.object)
+const hasLegacyColorSchemes = Boolean(
+  Object.keys(storedSettings.appearance?.themes || {}).length
+  || Object.keys(storedColorSchemes).length
+)
+
+if (!Object.keys(storedColorSchemes).length) {
+  Object.assign(storedColorSchemes, storedSettings.appearance?.themes || {})
+  if (!storedColorSchemes.default)
+    storedColorSchemes.default = copyObj(settings.defaults.appearance.themes.default)
+}
+
+if (
+  hasLegacyColorSchemes
+  && !localStorage.getItem('colorscheme-semantics-version')
+) {
+  Object.assign(storedColorSchemes, migrateColorSchemes(storedColorSchemes, true))
+  localStorage.setItem('colorscheme-semantics-version', '2')
+} else {
+  Object.assign(storedColorSchemes, migrateColorSchemes(storedColorSchemes))
+}
+localColorSchemes.set(storedColorSchemes)
+
+delete storedSettings.appearance?.themes
+delete storedSettings.appearance?.colorScheme
+delete storedSettings.query?.AI
+const assignedSettings = assignDeep(settings.defaults, storedSettings)
+assignedSettings.appearance.themes = storedColorSchemes
 
 export const SettingsContext = createContext(null)
 export const SetSettingsContext = createContext(null)
@@ -16,15 +47,15 @@ export default function SettingsProvider({ children }) {
   const [settings, setSettings] = useState(assignedSettings)
 
   const activeTheme = settings.appearance.activeTheme
-  const systemColorScheme = useColorSchemeDetector()
-  const colorScheme = settings.appearance.colorScheme === 'auto' 
-    ? systemColorScheme
-    : settings.appearance.colorScheme
-  const theme = settings.appearance.themes[activeTheme][colorScheme]
+  const colorScheme = 'default'
+  const theme = settings.appearance.themes[activeTheme]
 
   // sync settings with localStorage
   useEffect(() => {
-    localSettigns.set(settings)
+    const settingsToStore = copyObj(settings)
+    delete settingsToStore.appearance.themes
+    localSettigns.set(settingsToStore)
+    localColorSchemes.set(settings.appearance.themes)
   }, [settings])
 
   // sync JOY UI color scheme

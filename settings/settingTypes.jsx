@@ -256,22 +256,22 @@ export class Theme {
       name: 'primary',
       contrast: {
         name: 'secondary',
-        isBackground: true,
+        isBackground: false,
         path: '_parent_.secondary'
       },
       dependants: [
-        'chevron', 'query', 'suggestions', 'time'
+        'background'
       ]
     },
     {
       name: 'secondary',
       contrast: {
         name: 'primary',
-        isBackground: false,
+        isBackground: true,
         path: '_parent_.primary'
       },
       dependants: [
-        'background'
+        'chevron', 'query', 'suggestions', 'time'
       ]
     },
     {
@@ -349,20 +349,12 @@ export class Theme {
     }
   ]
   static defaultColors = {
-    light: {
-      primary: '#212121',
-      secondary: '#dee1e6',
-      accent: '#3b72ff'
-    },
-    dark: {
-      primary: '#f2f2f2',
-      secondary: '#212121',
-      accent: '#ffa00b'
-    }
+    primary: '#dee1e6',
+    secondary: '#212121',
+    accent: '#3b72ff'
   }
 
   constructor() {
-    this.light = new Palette(Theme.structure, Theme.defaultColors.light)
-    this.dark = new Palette(Theme.structure, Theme.defaultColors.dark)
+    Object.assign(this, new Palette(Theme.structure, Theme.defaultColors))
   }
 }

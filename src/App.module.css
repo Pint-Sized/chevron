@@ -33,7 +33,7 @@
   font-size: x-large;
   padding: .5em 1em;
   border-radius: 1em;
-  border: 5px solid var(--primary);
-  background: var(--secondary);
-  color: var(--primary);
+  border: 5px solid var(--secondary);
+  background: var(--primary);
+  color: var(--secondary);
 }

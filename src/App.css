@@ -1,6 +1,6 @@
 .app {
   background: var(--background);
-  color: var(--primary);
+  color: var(--secondary);
   width: 100vw;
   height: 100vh;
   overflow: hidden;
@@ -11,18 +11,18 @@
 }
 .app *::selection {
   background: var(--accent);
-  color: var(--secondary);
+  color: var(--primary);
 }
 .app *::-moz-selection {
   background: var(--accent);
-  color: var(--secondary);
+  color: var(--primary);
 }
 .app *::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
 .app *::-webkit-scrollbar-thumb {
-  background: var(--primary);
+  background: var(--secondary);
   border-radius: 10px;
 }
 .app *::-webkit-scrollbar-thumb:hover {
@@ -38,7 +38,7 @@ body, html, #root {
 body {
   position: relative;
   font-family: var(--font), Arial, Helvetica, sans-serif;
-  color: var(--primary);
+  color: var(--secondary);
 }
 
 code {

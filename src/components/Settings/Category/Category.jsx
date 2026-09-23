@@ -3,12 +3,10 @@ import {
   Box, 
   List, ListItem, ListItemContent, ListDivider, 
   Button, 
-  Typography, 
-  Switch
+  Typography
 } from '@mui/joy'
 import Property from '../Property/Property'
 import { FiChevronRight } from 'react-icons/fi'
-import { BsSun, BsMoon } from 'react-icons/bs'
 import { Theme } from '../../../../settings/settingTypes'
 import { getPropertyByPath } from '../../../functions/dataUtils/propertyByPath'
 
@@ -21,9 +19,7 @@ function Category({ path, template, current, hidden, onChange, visibility=true }
   const name = pathArray[pathArray.length-1]
   const [isOpened, setIsOpened] = useState(!nested)
   const isTheme = getPropertyByPath(template, path) instanceof Theme
-  // only 1 level nesting is supported
-  const [innerPath, setInnerPath] = useState(isTheme ? (document.body.getAttribute('data-color-scheme') || 'light') : '')
-  const itemsPath = innerPath ? path + '.' + innerPath : path
+  const itemsPath = path
 
   return <>
     <Box
@@ -40,7 +36,6 @@ function Category({ path, template, current, hidden, onChange, visibility=true }
           sx={{textTransform: isTheme ? undefined : 'capitalize' }}>
             {name}
         </Typography>
-        { isTheme && <ThemeControl selected={innerPath} onSetSelected={() => setInnerPath(si => si === 'light' ? 'dark' : 'light')}/> }
         { 
           nested && <Button variant='plain' color='neutral' sx={{ml: 'auto'}}>
               <FiChevronRight
@@ -112,31 +107,6 @@ function Items({ template, current, path, isThemeColor=false, hidden, onChange }
   jsx.shift()
 
   return jsx
-}
-
-function ThemeControl({ selected, onSetSelected }) {
-  return (
-    <Switch
-      checked={selected === 'light'}
-      onChange={onSetSelected}
-      onClick={e => e.stopPropagation()}
-      size='md'
-      variant={selected === 'light' ? 'solid' : 'outlined'}
-      color='warning'
-      sx={{ml: 1}}
-      slotProps={{
-        track: {
-          children: (
-            <>
-              <div style={{display: 'flex', justifyContent: 'space-between', width: '100%', padding: '0 6px'}}>
-                <BsSun size='1em'/> 
-                <BsMoon size='1em' sx={{mr: 'auto'}}/>
-              </div>
-            </>
-          )
-        }
-      }}
-    />)
 }
 
 export default Category

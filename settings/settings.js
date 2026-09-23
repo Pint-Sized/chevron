@@ -29,7 +29,6 @@ const template = {
     redirectTarget: new types.Switch('_self', ['_self', '_blank'])
   },
   appearance: {
-    colorScheme: new types.List('auto', ['auto', 'light', 'dark']),
     activeTheme: new types.List('default', 'appearance.themes'),
     themes: {
       default: new types.Theme()
@@ -89,15 +88,6 @@ const template = {
         { min: 0, max: 50 }
       )
     },
-    AI: {
-      enabled: new types.Switch(true),
-      apiKey: new types.Input('', 'Enter your openai api key'),
-      temperature: new types.Range(
-        0.4,
-        { min: 0, max: 1, step: 0.05 }
-      ),
-      language: new types.Input('')      
-    }
   },
   menu: {
     rows: new types.Range(
@@ -151,13 +141,10 @@ class Settings {
   get hidden() {
     const result = [...this._hidden]
     
-    // hide advanced theme colors
+    // hide advanced colors
     const hiddenColors = ['chevron', 'query', 'suggestions', 'background', 'prefix', 'visited', 'time', 'card']
     for (const theme of Object.keys(this.template.appearance.themes)) {
-      // light theme
-      hiddenColors.forEach(hC => result.push('appearance.themes.' + theme + '.light.' + hC))
-      // dark theme
-      hiddenColors.forEach(hC => result.push('appearance.themes.' + theme + '.dark.' + hC))
+      hiddenColors.forEach(hC => result.push('appearance.themes.' + theme + '.' + hC))
     }
 
     return result
